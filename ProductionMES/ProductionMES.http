@@ -1,0 +1,6 @@
+@ProductionMES_HostAddress = http://localhost:5095
+
+GET {{ProductionMES_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
