@@ -5,10 +5,11 @@
         public PartProduction() : base()
         {
         }
-        public PartProduction(string line, string station, string traceabilityCode, string user) : base()
+        public PartProduction(string line, string station, 
+                                string traceabilityCode, string user) : base(line,station)
         {
-            OccurenceDate = DateTime.Now;
             TraceabilityCode = traceabilityCode;
+            OccurenceDate = DateTime.Now;            
             User = user;
         }
        

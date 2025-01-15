@@ -1,27 +1,24 @@
 ﻿using ProductionMES.Core.Entities;
+using ProductionMES.Core.Enum;
 using ProductionMES.Core.Interfaces;
 
-namespace ProductionMES.Infrastructure.ProductionRepository
+namespace ProductionMES.UnitTest.FakeRepository
 {
-    public class ProductionRepository : IProductionRepository
+    public class FakeProductionRepository : IProductionRepository
     {
-        public int AddProduction(PartProduction partProduction)
-        {
-            return 550;            
-        }       
-
         public ProductionOrder ExistOpAvaliable(string line, string station, string traceabilityCode, string currentModel)
         {
             if (currentModel == "ModelA")
-            {
-                return new ProductionOrder(30,15,"ModelA",Core.Enum.ProductionOrderStatus.InProgress,line,station);
-            }
-            else if (currentModel == "ModelB")
-            {
-                return new ProductionOrder(30, 15, "ModelA", Core.Enum.ProductionOrderStatus.Canceled, line, station);
-            }
+                return new ProductionOrder(30, 15, "ModelA", ProductionOrderStatus.InProgress, line, station);
+            if (currentModel == "ModelB")
+                return new ProductionOrder(30, 15, "ModelB", ProductionOrderStatus.Canceled, line, station);
             return null;
         }
+        public int AddProduction(PartProduction partProduction)
+        {
+            return 550;
+        }
+
 
         public string MaskValidate(string currentModel)
         {

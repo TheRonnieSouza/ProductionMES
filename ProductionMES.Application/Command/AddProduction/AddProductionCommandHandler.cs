@@ -12,12 +12,15 @@ namespace ProductionMES.Application.Command.AddProduction
             _repository = repository;
         }
        
-        public Task<bool> Handle(AddProductionCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(AddProductionCommand request, CancellationToken cancellationToken)
         {
             var partProduction = request.ToEntity();
-            var resultIdStatus = _repository.AddProductionEstacaoStatus(partProduction);
+            int resultIdStatus =  _repository.AddProduction(partProduction);
 
-            return Task.FromResult(true);
+            if(resultIdStatus > 0)
+                return await Task.FromResult(true);
+
+            return await Task.FromResult(false);
         }
     }
 }

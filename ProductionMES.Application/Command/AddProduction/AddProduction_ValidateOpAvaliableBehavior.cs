@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using ProductionMES.Core.Entities;
+using ProductionMES.Core.Enum;
 using ProductionMES.Core.Interfaces;
 
 namespace ProductionMES.Application.Command.AddProduction
@@ -15,7 +16,13 @@ namespace ProductionMES.Application.Command.AddProduction
         {
            ProductionOrder order =  _repository.ExistOpAvaliable(request.line, request.station, request.traceabilityCode,request.currentModel);
 
-            return await next();
+            if (order == null)
+                return false;
+
+            if (order.Status == ProductionOrderStatus.InProgress)
+                return await next();
+
+                return false;
         }
     }
 }

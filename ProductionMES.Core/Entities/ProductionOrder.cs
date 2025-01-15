@@ -8,6 +8,19 @@ namespace ProductionMES.Core.Entities
         {
         }
 
+        public ProductionOrder(int totalQuantity,
+                                int currentQuantity,
+                                string product,
+                                ProductionOrderStatus status, 
+                                string line, 
+                                string station) : base(line,station)
+        {           
+            TotalQuantity = totalQuantity;
+            CurrentQuantity = currentQuantity;
+            Product = product;
+            Status = status;
+        }
+
         public int TotalQuantity { get; private set; }
 
         public int CurrentQuantity { get; private set; }

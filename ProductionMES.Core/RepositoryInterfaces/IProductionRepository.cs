@@ -4,7 +4,7 @@ namespace ProductionMES.Core.Interfaces
 {
     public interface IProductionRepository
     {
-        public string MaskValidate(string traceabilityCode, string currentModel);
+        public string MaskValidate(string currentModel);
 
         public ProductionOrder ExistOpAvaliable(string line, string station, string traceabilityCode, string currentModel);
     
@@ -14,9 +14,7 @@ namespace ProductionMES.Core.Interfaces
     
         public bool ValidateWorkflow(string line, string station, string traceabilityCode, string currentModel);
         
-        public int AddProductionEstacaoStatus(PartProduction partProduction);
-
-        public void AddProductionEstacaoRastreabilidade(PartProduction partProduction, int idStatus);
+        public int AddProduction(PartProduction partProduction);
 
     }
 }

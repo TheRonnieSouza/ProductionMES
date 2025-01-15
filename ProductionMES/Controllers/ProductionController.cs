@@ -13,13 +13,6 @@ namespace ProductionMES.Controllers
             _mediator = mediator;
         }
 
-        //[HttpGet("ValidateTraceabilityCode")]
-        //public async Task<IActionResult> ValidateTraceabilityCode(ValidateTraceabilityQuery query)
-        //{
-        //    var productionOrders = await _mediator.Send(query);
-        //    return Ok(productionOrders);
-        //}
-
         [HttpPost("AddProduction")]
         public async Task<IActionResult> AddProduction(AddProductionCommand command)
         {
@@ -32,12 +25,5 @@ namespace ProductionMES.Controllers
             throw new NotImplementedException();
         }
 
-
-        //[HttpPut]
-        //public async Task<IActionResult> UpdatePartStatus(UpdatePartStatusCommand command)
-        //{
-        //    await _mediator.Send(command);
-        //    return Ok();
-        //}
     }
 }

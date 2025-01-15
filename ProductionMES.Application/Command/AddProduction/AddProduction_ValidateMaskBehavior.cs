@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using ProductionMES.Core.Interfaces;
-using System.Text.RegularExpressions;
 
 namespace ProductionMES.Application.Command.AddProduction
 {
@@ -14,7 +13,7 @@ namespace ProductionMES.Application.Command.AddProduction
         }
         public async Task<bool> Handle(AddProductionCommand request, RequestHandlerDelegate<bool> next, CancellationToken cancellationToken)
         {
-            string mask =  _repository.MaskValidate(request.traceabilityCode,request.currentModel);
+            string mask =  _repository.MaskValidate(request.currentModel);
 
             if (string.IsNullOrEmpty(mask) || string.IsNullOrEmpty(request.traceabilityCode))
                 return false;
@@ -24,53 +23,49 @@ namespace ProductionMES.Application.Command.AddProduction
 
             foreach (var part in splitMask)
             {
-                // Localiza o início do comprimento do campo
                 int startBracket = part.IndexOf('[');
                 int endBracket = part.IndexOf(']');
 
                 if (startBracket == -1 || endBracket == -1 || endBracket <= startBracket)
-                    return false; // Máscara inválida
+                    return false; 
 
-                // Extrai o nome e o comprimento do campo
                 string fieldName = part.Substring(0, startBracket).Trim();
-                string lengthStr = part.Substring(startBracket + 1, endBracket - startBracket - 1).Trim();
+                string lengthName = part.Substring(startBracket + 1, endBracket - startBracket - 1).Trim();
 
-                if (!int.TryParse(lengthStr, out int fieldLength) || fieldLength <= 0)
-                    return false; // Comprimento inválido
-
-                // Verifica se a string tem caracteres suficientes para validar este campo
+                if (!int.TryParse(lengthName, out int fieldLength) || fieldLength <= 0)
+                    return false; 
+                                
                 if (currentIndex + fieldLength > request.traceabilityCode.Length)
                     return false;
 
                 string fieldValue = request.traceabilityCode.Substring(currentIndex, fieldLength);
                 currentIndex += fieldLength;
 
-                // Validação com switch-case
                 switch (fieldName)
                 {
                     case "SERIAL_NUMBER":
                     case "DIA_NUMBER":
                     case "ANO_NUMBER":
-                        if (!IsNumeric(fieldValue)) // Verifica se é numérico
+                        if (!IsNumeric(fieldValue)) 
                             return false;
                         break;
 
                     case "CLIENT_TEXT":
-                        if (!IsAlphabetic(fieldValue)) // Verifica se é apenas letras
+                        if (!IsAlphabetic(fieldValue)) 
                             return false;
                         break;
 
                     case "PRODUCT_ALFANUMERICO":
-                        if (!IsAlphanumeric(fieldValue)) // Verifica se é alfanumérico
+                        if (!IsAlphanumeric(fieldValue)) 
                             return false;
                         break;
 
                     default:
-                        return false; // Campo desconhecido na máscara
+                        return false; 
                 }
             }
 
-            // Verifica se o comprimento total corresponde ao esperado (17)
+            
             bool totalLength = currentIndex == request.traceabilityCode.Length;
             if (!totalLength)
                 return false; 
@@ -78,13 +73,10 @@ namespace ProductionMES.Application.Command.AddProduction
                 return await next();
         }
 
-        // Funções auxiliares
         private bool IsNumeric(string value) => value.All(char.IsDigit);
 
         private bool IsAlphabetic(string value) => value.All(char.IsLetter);
 
-        private bool IsAlphanumeric(string value) => value.All(char.IsLetterOrDigit);
-        
-
+        private bool IsAlphanumeric(string value) => value.All(char.IsLetterOrDigit);  
     }
 }
