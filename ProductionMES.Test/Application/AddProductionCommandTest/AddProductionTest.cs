@@ -7,7 +7,7 @@ namespace ProductionMES.UnitTest.Application.AddProductionCommandTest
     public class AddProductionTest
     {
         [Fact]
-        public async Task GivenTraceabilityCodeIsOk_WhenValidated_ThenAllowAddingToProduction()
+        public async Task GivenTraceabilityCodeIsOk_WhenAddingToProduction_ThenProductionInsertSucess()
         {
             //Arrange
             var fakeRepository = new FakeProductionRepository();
@@ -34,84 +34,35 @@ namespace ProductionMES.UnitTest.Application.AddProductionCommandTest
             command.line.Should().Be(partProduction.Line);
             command.station.Should().Be(partProduction.Station);
             command.user.Should().Be(partProduction.User);
-
         }
 
+        [Fact]
 
+        public async Task GivenInsertFail_WhenAddinToProduction_ThenReturnFalse()
+        {
 
+            //Arrange
+            var fakeRepository = new FakeProductionRepository();
+                 fakeRepository.SimulateInsertFailure(true);
 
+            var command = new AddProductionCommand("102314925ASKR2525",
+                                                    "line",
+                                                    "station",
+                                                    "user",
+                                                    "ModelA",
+                                                    DateTime.Now);
+            var partProduction = command.ToEntity();
 
+            var handle =  new AddProductionCommandHandler(fakeRepository);
 
+            //Act
 
+            var result = await handle.Handle(command, CancellationToken.None);
 
+            //Assert
 
+            Assert.False(result);
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //Teste usando o repositório real
-        //[Fact]
-        //public async Task GivenTraceabilityCodeIsOk_WhenValidated_ThenAllowAddingToProduction()
-        //{
-        //    //Arrange
-        //    var mockRepository = new Mock<IProductionRepository>();
-
-        //    var command = new AddProductionCommand("102314925ASKR2525",
-        //                                            "line",
-        //                                            "station",
-        //                                            "user",
-        //                                            "modelA",
-        //                                            DateTime.Now);
-
-        //    var partProduction = command.ToEntity();
-
-        //    mockRepository.Setup(m => m.AddProduction(It.Is<PartProduction>(p =>
-        //                                              p.TraceabilityCode == "102314925ASKR2525" &&
-        //                                              p.Line == "line" &&
-        //                                              p.Station == "station" &&
-        //                                              p.User == "user")))
-        //                                              .Returns(550);
-
-        //    var handler = new AddProductionCommandHandler(mockRepository.Object);
-
-        //    //Act
-
-        //    var result = await handler.Handle(command, CancellationToken.None);
-
-        //    //Assert
-
-        //    Assert.True(result);
-        //    Assert.Equal(command.traceabilityCode, partProduction.TraceabilityCode);
-        //    command.line.Should().Be(command.line);
-        //    command.station.Should().Be(command.station);
-        //    command.user.Should().Be(command.user);
-
-        //    mockRepository.Verify(m => m.AddProduction(It.Is<PartProduction>(p =>
-        //     p.TraceabilityCode == "102314925ASKR2525" &&
-        //     p.Line == "line" &&
-        //     p.Station == "station" &&
-        //     p.User == "user")), Times.Once);
-        //}
     }
 }

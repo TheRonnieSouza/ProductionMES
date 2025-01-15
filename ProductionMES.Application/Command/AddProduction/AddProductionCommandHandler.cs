@@ -15,9 +15,9 @@ namespace ProductionMES.Application.Command.AddProduction
         public async Task<bool> Handle(AddProductionCommand request, CancellationToken cancellationToken)
         {
             var partProduction = request.ToEntity();
-            int resultIdStatus =  _repository.AddProduction(partProduction);
+            object resultIdStatus =  _repository.AddProduction(partProduction);
 
-            if(resultIdStatus > 0)
+            if(resultIdStatus != null && Convert.ToInt64(resultIdStatus) > 0)
                 return await Task.FromResult(true);
 
             return await Task.FromResult(false);

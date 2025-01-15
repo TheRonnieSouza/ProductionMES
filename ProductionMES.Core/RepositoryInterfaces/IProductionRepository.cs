@@ -14,7 +14,7 @@ namespace ProductionMES.Core.Interfaces
     
         public bool ValidateWorkflow(string line, string station, string traceabilityCode, string currentModel);
         
-        public int AddProduction(PartProduction partProduction);
+        public object AddProduction(PartProduction partProduction);
 
     }
 }

@@ -5,7 +5,7 @@ namespace ProductionMES.Infrastructure.ProductionRepository
 {
     public class ProductionRepository : IProductionRepository
     {
-        public int AddProduction(PartProduction partProduction)
+        public object AddProduction(PartProduction partProduction)
         {
             return 550;            
         }       

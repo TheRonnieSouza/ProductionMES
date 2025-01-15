@@ -11,7 +11,7 @@ namespace ProductionMES.Test.Application.Commands
     public class ValidateMaskBehaviorTest
     {        
         [Fact]
-        public async Task GivenValidTraceabilityCodeMask_WhenValidated_ThenAllowsAddingToProduction()
+        public async Task GivenValidTraceabilityCodeMaskOK_WhenValidated_ThenAllowsAddingToProduction()
         {
             //Arrange
             var mockRepository = new Mock<IProductionRepository>();

@@ -6,6 +6,20 @@ namespace ProductionMES.UnitTest.FakeRepository
 {
     public class FakeProductionRepository : IProductionRepository
     {
+        private bool _simulateInsertFailure;
+
+        public void SimulateInsertFailure(bool simulate)
+        {
+            _simulateInsertFailure = simulate;
+        }
+
+        public object AddProduction(PartProduction partProduction)
+        {
+            if (_simulateInsertFailure)
+                return null; 
+
+            return 550; 
+        }
         public ProductionOrder ExistOpAvaliable(string line, string station, string traceabilityCode, string currentModel)
         {
             if (currentModel == "ModelA")
@@ -13,12 +27,7 @@ namespace ProductionMES.UnitTest.FakeRepository
             if (currentModel == "ModelB")
                 return new ProductionOrder(30, 15, "ModelB", ProductionOrderStatus.Canceled, line, station);
             return null;
-        }
-        public int AddProduction(PartProduction partProduction)
-        {
-            return 550;
-        }
-
+        }    
 
         public string MaskValidate(string currentModel)
         {
